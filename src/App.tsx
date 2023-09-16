@@ -5,11 +5,11 @@ import { USERKEYCHANNEL, PRESSCHANNEL } from './const';
 import './App.css';
 
 function App() {
-  const listener = useRef(null);
+  const listener = useRef<any>(null);
   const [form] = Form.useForm();
   const [selectedItem, setSelectedItem] = useState('');
   const [textInput, setTextInput] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const TemplteOptions = [
     { label: '模板1', value: '模板1' },

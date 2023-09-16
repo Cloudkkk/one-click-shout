@@ -1,21 +1,29 @@
 import { useRef, useState } from 'react';
-import { listen } from '@tauri-apps/api/event';
+import { emit, listen } from '@tauri-apps/api/event';
 import { message, Form, Switch, Select, Input } from 'antd';
+import { USERKEYCHANNEL, PRESSCHANNEL } from './const';
 import './App.css';
 
 function App() {
   const listener = useRef(null);
   const [form] = Form.useForm();
-  const [isAuto, setIsAuto] = useState(true);
   const [selectedItem, setSelectedItem] = useState('');
   const [textInput, setTextInput] = useState('');
   const [isOpen, setIsOpen] = useState(false);
 
-  const OPTIONS = [
-    { label: '按A', value: 'A' },
-    { label: '按S', value: 'S' },
-    { label: '按D', value: 'D' }
+  const TemplteOptions = [
+    { label: '模板1', value: '模板1' },
+    { label: '模板2', value: '模板2' },
+    { label: '模板3', value: '模板3' }
   ]
+
+  const onChangeSelect = async (value) => {
+    setSelectedItem(value);
+    onCloseListen();
+    await emit(USERKEYCHANNEL, {
+      user_key: selectedItem
+    })
+  }
 
   /**
    * @description 开启监听
@@ -26,7 +34,7 @@ function App() {
       if (!listener.current) {
         message.success('开始你的表演');
         (async () => {
-          listener.current = await listen('f1_pressed', (event) => {
+          listener.current = await listen(PRESSCHANNEL, (event) => {
             console.log('1111');
           });
         })();
@@ -59,35 +67,20 @@ function App() {
           form={form}
           style={{ minWidth: 200, maxWidth: 600 }}
         >
-          <Form.Item>
-            <div>
-              <span className='mr10'>自己动</span>
-              <Switch
-                checked={isAuto}
-                onChange={(checked) => { setIsAuto(checked); onCloseListen(); }}
-              />
-              <span className='ml10'>全自动</span>
-            </div>
+          <Form.Item name='select' rules={[{ required: true, message: '请选择模式' }]}>
+            <Select
+              value={selectedItem}
+              options={TemplteOptions}
+              onChange={onChangeSelect}
+            />
           </Form.Item>
-          {
-            isAuto ? (
-              <Form.Item name='select' rules={[{ required: true, message: '请选择模式' }]}>
-                <Select
-                  value={selectedItem}
-                  options={OPTIONS}
-                  onChange={(value) => { setSelectedItem(value); onCloseListen(); }}
-                />
-              </Form.Item>
-            ) : (
-              <Form.Item name='input' rules={[{ required: true, message: '请输入内容' }]}>
-                <Input.TextArea
-                  value={textInput}
-                  rows={4}
-                  onInput={(e) => { setTextInput(e.target.value); onCloseListen(); }}
-                />
-              </Form.Item>
-            )
-          }
+          <Form.Item name='input' rules={[{ required: true, message: '请输入内容' }]}>
+            <Input.TextArea
+              value={textInput}
+              rows={4}
+              onInput={(e) => { setTextInput(e.target.value); onCloseListen(); }}
+            />
+          </Form.Item>
           <Form.Item>
             <Switch
               checked={isOpen}

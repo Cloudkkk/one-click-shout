@@ -19,7 +19,7 @@ fn main() {
                 let window = window_clone.lock().unwrap();
                 window.emit("f1_pressed", None::<()>).unwrap();
             }
-            std::thread::sleep(std::time::Duration::from_millis(100));
+            std::thread::sleep(std::time::Duration::from_millis(200));
         });
         Ok(())
     })

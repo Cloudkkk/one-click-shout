@@ -1,14 +1,25 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import { listen } from '@tauri-apps/api/event';
 
 function App() {
-  const [count, setCount] = useState(0)
-listen('f1_pressed', (event) => {
-  console.log('1111');
-});
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let unlisten;
+    (async () => {
+      unlisten = await listen('f1_pressed', (event) => {
+        console.log('1111');
+      });
+    })();
+    return () => {
+      if (unlisten) {
+        unlisten();
+      }
+    };
+  }, [count])
   return (
     <>
       <div>

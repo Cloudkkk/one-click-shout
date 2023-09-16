@@ -1,0 +1,9 @@
+{
+  "extends": "./base.json",
+  "compilerOptions": {
+    "target": "es6",
+    "module": "ESNext",
+  },
+  "exclude": ["node_modules"],
+  "include": ["*.ts", "**/*.ts", "__tests__/**/*.ts", "example/index.tsx"]
+}

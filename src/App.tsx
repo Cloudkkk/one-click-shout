@@ -1,8 +1,8 @@
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { emit, listen } from '@tauri-apps/api/event';
 import { message, Form, Switch, Select, Input } from 'antd';
-import { USERKEYCHANNEL, PRESSCHANNEL } from './const';
-import './App.css';
+import { USERKEY_CHANNEL, KEY_PRESS_CHANNEL } from './const';
+import './App.css'; 
 
 function App() {
   const listener = useRef<any>(null);
@@ -17,10 +17,10 @@ function App() {
     { label: '模板3', value: '模板3' }
   ]
 
-  const onChangeSelect = async (value) => {
+  const onChangeSelect = async (value:any) => {
     setSelectedItem(value);
     onCloseListen();
-    await emit(USERKEYCHANNEL, {
+    await emit(USERKEY_CHANNEL, {
       user_key: selectedItem
     })
   }
@@ -34,7 +34,7 @@ function App() {
       if (!listener.current) {
         message.success('开始你的表演');
         (async () => {
-          listener.current = await listen(PRESSCHANNEL, (event) => {
+          listener.current = await listen(KEY_PRESS_CHANNEL, (event) => {
             console.log('1111');
           });
         })();
@@ -78,7 +78,6 @@ function App() {
             <Input.TextArea
               value={textInput}
               rows={4}
-              onInput={(e) => { setTextInput(e.target.value); onCloseListen(); }}
             />
           </Form.Item>
           <Form.Item>

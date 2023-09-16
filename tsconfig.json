@@ -3,7 +3,9 @@
   "compilerOptions": {
     "target": "es6",
     "module": "ESNext",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "allowJs": true,
   },
-  "exclude": ["node_modules"],
-  "include": ["*.ts", "**/*.ts", "__tests__/**/*.ts", "example/index.tsx"]
+  "exclude": ["node_modules"]
 }

@@ -12,7 +12,6 @@ use clipboard::ClipboardContext;
 
 const _USER_KEY_CHANNEL: &str = "user_key_channel";
 const KEY_PRESS_CHANNEL: &str = "key_press_channel";
-const SWITCH_CHANNEL: &str ="switch_channel";
 // 创建一个全局变量来存储is_listening的状态
 static IS_LISTENING: Lazy<Arc<Mutex<bool>>> = Lazy::new(|| Arc::new(Mutex::new(false)));
 
@@ -27,6 +26,7 @@ fn switch_command(switch_value: bool)-> String {
         "Switch Closed!".into()
     }
 }
+
 //主函数
 fn main() {
     let device_state = DeviceState::new();
@@ -43,7 +43,8 @@ fn main() {
             let mut enigo = Enigo::new(); 
             let keys = device_state.get_keys();
             let is_listening = IS_LISTENING.lock().unwrap();
-            if *is_listening && keys.contains(&Keycode::O) {
+            // if *is_listening && keys.contains(&Keycode::O) {
+            if  keys.contains(&Keycode::O) {
                 let window = window_clone.lock().unwrap();
                 enigo.key_down(Key::Shift);
                 enigo.key_click(Key::Return);
@@ -51,11 +52,15 @@ fn main() {
                 // 创建一个剪切板上下文
                 let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
                 // 将字符串复制到剪切板
-                ctx.set_contents("你要复制的字符串".to_owned()).unwrap();
+                ctx.set_contents("姐姐晚上一个人睡吗OvO".to_owned()).unwrap();
                 // 模拟粘贴热键
-                enigo.key_down(Key::Control);
+                #[cfg(target_os = "macos")]
+                let control_key = Key::Meta;
+                #[cfg(target_os = "windows")]
+                let control_key = Key::Control;
+                enigo.key_down(control_key); // 使用 Meta 键代替 Control 键
                 enigo.key_click(Key::Layout('v'));
-                enigo.key_up(Key::Control);
+                enigo.key_up(control_key);
                 window.emit(KEY_PRESS_CHANNEL, None::<()>).unwrap();
             }
             std::thread::sleep(std::time::Duration::from_millis(200));

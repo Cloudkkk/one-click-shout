@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { emit, listen } from '@tauri-apps/api/event';
+import { invoke } from '@tauri-apps/api/tauri';
 import { message, Form, Switch, Select, Input } from 'antd';
-import { USERKEY_CHANNEL, KEY_PRESS_CHANNEL } from './const';
+import { USER_KEY_CHANNEL, KEY_PRESS_CHANNEL ,SWITCH_COMMAND} from './const';
 import './App.css'; 
-
 function App() {
   const listener = useRef<any>(null);
   const [form] = Form.useForm();
@@ -20,7 +20,7 @@ function App() {
   const onChangeSelect = async (value:any) => {
     setSelectedItem(value);
     onCloseListen();
-    await emit(USERKEY_CHANNEL, {
+    await emit(USER_KEY_CHANNEL, {
       user_key: selectedItem
     })
   }
@@ -33,6 +33,11 @@ function App() {
       await form.validateFields();
       if (!listener.current) {
         message.success('开始你的表演');
+        invoke(SWITCH_COMMAND, {switchValue:true}).then(res=>{
+          console.log(res,'哈哈哈');
+        }).catch(err =>{
+          
+        });
         (async () => {
           listener.current = await listen(KEY_PRESS_CHANNEL, (event) => {
             console.log('1111');
@@ -52,6 +57,7 @@ function App() {
     setIsOpen(false);
     if (listener.current) {
       message.info('演出结束了');
+      // emit(SWITCH_COMMAND, false);
       listener.current();
       listener.current = null;
     }

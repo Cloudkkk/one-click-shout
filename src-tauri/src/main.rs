@@ -6,6 +6,9 @@ use enigo::{Enigo, KeyboardControllable, Key};
 use tauri::Manager;
 use std::sync::{Arc, Mutex};
 use once_cell::sync::Lazy;
+// 引入clipboard库
+use clipboard::ClipboardProvider;
+use clipboard::ClipboardContext;
 
 const _USER_KEY_CHANNEL: &str = "user_key_channel";
 const KEY_PRESS_CHANNEL: &str = "key_press_channel";
@@ -45,6 +48,14 @@ fn main() {
                 enigo.key_down(Key::Shift);
                 enigo.key_click(Key::Return);
                 enigo.key_up(Key::Shift);
+                // 创建一个剪切板上下文
+                let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
+                // 将字符串复制到剪切板
+                ctx.set_contents("你要复制的字符串".to_owned()).unwrap();
+                // 模拟粘贴热键
+                enigo.key_down(Key::Control);
+                enigo.key_click(Key::Layout('v'));
+                enigo.key_up(Key::Control);
                 window.emit(KEY_PRESS_CHANNEL, None::<()>).unwrap();
             }
             std::thread::sleep(std::time::Duration::from_millis(200));

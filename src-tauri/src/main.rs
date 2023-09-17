@@ -18,7 +18,11 @@ fn switch_command(switch_value: bool)-> String {
     let mut is_listening = IS_LISTENING.lock().unwrap();
     *is_listening = switch_value;
     println!("前端传来的值是: {}", switch_value);
-    "Switch Opened!".into()
+    if switch_value {
+        "Switch Opened!".into()
+    } else {
+        "Switch Closed!".into()
+    }
 }
 //主函数
 fn main() {
@@ -45,7 +49,7 @@ fn main() {
             let mut enigo = Enigo::new(); 
             let keys = device_state.get_keys();
             let is_listening = IS_LISTENING.lock().unwrap();
-            if *is_listening && keys.contains(&Keycode::A) {
+            if *is_listening && keys.contains(&Keycode::O) {
                 let window = window_clone.lock().unwrap();
                 enigo.key_down(Key::Shift);
                 enigo.key_click(Key::Return);

@@ -8,11 +8,11 @@
         // 支持引入 json 模块
         "resolveJsonModule": true,
         // React 项目需要配置此项
-        "jsx": "react",
+        "jsx": "react-jsx",
         // 禁止导入模块时大小写错误
         "forceConsistentCasingInFileNames": true,
-        /* 如果设为true，编译每个ts文件之后会生成一个js文件和一个声明文件,
-       declaration和allowJs不能同时设为true */
+        /* 如果设为true，编译每个ts文件之后会生成一个js文件和一个声明文件 */
+        /* declaration和allowJs不能同时设为true */
         "declaration": false,
         // 值为true或false，指定是否为声明文件.d.ts生成map文件
         "declarationMap": false,
@@ -22,6 +22,10 @@
         "inlineSources": false,
         // 不生成编译文件
         "noEmit": true,
+        // 允许导入 TypeScript 扩展名的模块
+        "allowImportingTsExtensions": true,
+        // 启用独立模块编译
+        "isolatedModules": true,
 
         // 生成文件的配置
         //
@@ -30,7 +34,7 @@
         // 指定生成哪个模块系统代码
         "module": "esnext",
         // 决定如何处理模块
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         // 编译的时候删除注释
         "removeComments": true,
         // 用于检查switch中是否有case没有使用break跳出switch
@@ -42,11 +46,13 @@
         // 生成的文件的换行符
         "newLine": "lf",
         "emitDecoratorMetadata": true,
+
         // stdout 输出
         //
         // 给错误和消息设置样式，使用颜色和上下文
         "pretty": true,
         "skipLibCheck": true,
+
         // 严格模式，可选择性的开启，建议开启的越多越好
         //
         // 严格模式

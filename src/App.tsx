@@ -1,71 +1,29 @@
-import React, { useRef, useState } from 'react';
-import { emit, listen } from '@tauri-apps/api/event';
+import React, { useState } from 'react';
 import { invoke } from '@tauri-apps/api/tauri';
-import { message, Form, Switch, Select, Input } from 'antd';
-import { USER_KEY_CHANNEL, KEY_PRESS_CHANNEL ,SWITCH_COMMAND} from './const';
-import './App.css'; 
+import { message, Form, Switch } from 'antd';
+import { SWITCH_COMMAND } from './const';
+import './App.css';
 function App() {
-  const listener = useRef<any>(null);
   const [form] = Form.useForm();
-  const [selectedItem, setSelectedItem] = useState('');
-  const [textInput, setTextInput] = useState('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  const TemplteOptions = [
-    { label: '模板1', value: '模板1' },
-    { label: '模板2', value: '模板2' },
-    { label: '模板3', value: '模板3' }
-  ]
-
-  const onChangeSelect = async (value:any) => {
-    setSelectedItem(value);
-    onCloseListen();
-    await emit(USER_KEY_CHANNEL, {
-      user_key: selectedItem
-    })
-  }
 
   /**
    * @description 开启监听
    */
-  const onOpenListen = async () => {
+  const onChangeIsOpen = async (checked: boolean) => {
     try {
-      await form.validateFields();
-      if (!listener.current) {
-        message.success('开始你的表演');
-        invoke(SWITCH_COMMAND, {switchValue:true}).then(res=>{
-          console.log(res,'哈哈哈');
-        }).catch(err =>{
-          
-        });
-        (async () => {
-          listener.current = await listen(KEY_PRESS_CHANNEL, (event) => {
-            console.log('1111');
-          });
-        })();
-      }
+      setIsOpen(checked);
+      const res: string = await invoke(SWITCH_COMMAND, { switchValue: checked });
+      message.info(`操作成功, ${res}`);
     } catch (error) {
-      console.log(error);
-      setIsOpen(false);
-    }
-  }
-
-  /**
-   * @description 关闭监听
-   */
-  const onCloseListen = () => {
-    setIsOpen(false);
-    if (listener.current) {
-      message.info('演出结束了');
-      // emit(SWITCH_COMMAND, false);
-      listener.current();
-      listener.current = null;
+      message.error(`操作成功, ${JSON.stringify(error)}`);
+      setIsOpen(!checked);
     }
   }
 
   return (
     <>
-      <h1>Vite + React</h1>
+      <h1>峡谷钢琴家1.0</h1>
       <div className="card">
         <Form
           labelCol={{ span: 0 }}
@@ -73,25 +31,12 @@ function App() {
           form={form}
           style={{ minWidth: 200, maxWidth: 600 }}
         >
-          <Form.Item name='select' rules={[{ required: true, message: '请选择模式' }]}>
-            <Select
-              value={selectedItem}
-              options={TemplteOptions}
-              onChange={onChangeSelect}
-            />
-          </Form.Item>
-          <Form.Item name='input' rules={[{ required: true, message: '请输入内容' }]}>
-            <Input.TextArea
-              value={textInput}
-              rows={4}
-            />
-          </Form.Item>
           <Form.Item>
             <Switch
               checked={isOpen}
               checkedChildren="开启"
               unCheckedChildren="关闭"
-              onChange={(checked) => { setIsOpen(checked); checked ? onOpenListen() : onCloseListen(); }}
+              onChange={onChangeIsOpen}
             />
           </Form.Item>
         </Form>

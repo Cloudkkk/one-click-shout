@@ -36,15 +36,6 @@ fn main() {
         let window = app.get_window("main").unwrap();
         let window = Arc::new(Mutex::new(window));
         let window_clone = Arc::clone(&window);
-        //创建的是一个可以在多个线程之间安全共享的互斥锁
-        // let is_listening_clone = Arc::clone(&is_listening);
-        // // 监听前端发来的开关事件
-        // app.listen_global(SWITCH_CHANNEL, move |event| {
-        //     let mut is_listening = is_listening_clone.lock().unwrap();
-        //     let payload = event.payload().map(|s| s.parse().unwrap_or(false)).unwrap_or(false);
-        //     println!("前端传来的值是: {}", payload);
-        //     *is_listening = payload;
-        // });
         std::thread::spawn(move || loop {
             let mut enigo = Enigo::new(); 
             let keys = device_state.get_keys();

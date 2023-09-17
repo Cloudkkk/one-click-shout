@@ -4,7 +4,7 @@
     "beforeBuildCommand": "npm run build",
     "beforeDevCommand": "npm run dev",
     "devPath": "http://localhost:3001",
-    "distDir": "../build"
+    "distDir": "../dist"
   },
   "package": {
     "productName": "one-click-shout",
@@ -32,8 +32,8 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
-      "longDescription": "",
+      "identifier": "com.cloud.lolPianist",
+      "longDescription": "峡谷钢琴家",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",
@@ -61,7 +61,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "one-click-shout",
+        "title": "峡谷钢琴家1.0",
         "width": 800
       }
     ]

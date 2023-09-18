@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { invoke } from '@tauri-apps/api/tauri';
-import { message, Form, Switch } from 'antd';
+import { message, Form, Switch, Input } from 'antd';
 import { SWITCH_COMMAND } from './const';
 import './App.css';
+
 function App() {
   const [form] = Form.useForm();
+  const [inputText, setInputText] = useState<string>('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   /**
@@ -22,27 +24,32 @@ function App() {
   }
 
   return (
-    <>
+    <div className="container">
       <h1>峡谷钢琴家1.0</h1>
-      <div className="card">
-        <Form
-          labelCol={{ span: 0 }}
-          wrapperCol={{ span: 24 }}
-          form={form}
-          style={{ minWidth: 200, maxWidth: 600 }}
-        >
-          <Form.Item>
-            <Switch
-              checked={isOpen}
-              checkedChildren="开启"
-              unCheckedChildren="关闭"
-              onChange={onChangeIsOpen}
-            />
-          </Form.Item>
-        </Form>
-      </div>
-    </>
-  )
+      <Form
+        labelCol={{ span: 0 }}
+        wrapperCol={{ span: 24 }}
+        form={form}
+        style={{ minWidth: 200, maxWidth: 600 }}
+      >
+        <Form.Item>
+          <Input.TextArea
+            rows={4}
+            value={inputText}
+            onChange={(e) => { setInputText(e.target.value) }}
+          />
+        </Form.Item>
+        <Form.Item>
+          <Switch
+            checked={isOpen}
+            checkedChildren="开启"
+            unCheckedChildren="关闭"
+            onChange={onChangeIsOpen}
+          />
+        </Form.Item>
+      </Form>
+    </div>
+  );
 }
 
 export default App

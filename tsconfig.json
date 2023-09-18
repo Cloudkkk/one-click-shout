@@ -1,11 +1,12 @@
 {
   "extends": "./base.json",
   "compilerOptions": {
-    "target": "es6",
+    "target": "ES6",
     "module": "ESNext",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "allowJs": true,
   },
+  "include": ["src"],
   "exclude": ["node_modules"]
 }

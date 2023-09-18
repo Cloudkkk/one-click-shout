@@ -30,7 +30,7 @@ function App() {
         labelCol={{ span: 0 }}
         wrapperCol={{ span: 24 }}
         form={form}
-        style={{ minWidth: 200, maxWidth: 600 }}
+        className="form"
       >
         <Form.Item>
           <Input.TextArea

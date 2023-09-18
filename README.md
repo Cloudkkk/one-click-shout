@@ -38,5 +38,3 @@ npm install
 ```bash
 npm run tauri
 ```
-
-```
